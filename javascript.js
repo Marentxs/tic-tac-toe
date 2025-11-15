@@ -47,15 +47,35 @@ const cell = function () {
 };
 
 const flow = (function () {
-  if (gameOver) {
-    return;
-  }
+  const board = gameboard;
+  const players = [
+    { name: player1, token: 1 },
+    { name: player2, token: 2 },
+  ];
+  let activePlayer = players[0];
 
-  if ((currentPlayer = player1)) {
-    board[i].push("X");
-    currentPlayer = player2;
-  } else if ((currentPlayer = player2)) {
-    board[i].push("O");
-    currentPlayer = player1;
-  }
+  const getActivePlayer = () => activePlayer;
+
+  const printNewRound = () => {
+    board.printBoard();
+    console.log(`${getActivePlayer().name}'s turn.`);
+  };
+
+  const playRound = (column) => {
+    if (board.isGameOver()) return;
+
+    if (activePlayer === players[0]) {
+      board.addToken(column, 1);
+      activePlayer = players[1];
+    } else {
+      board.addToken(column, 2);
+      activePlayer = players[0];
+    }
+
+    console.log(
+      `Playing ${getActivePlayer().name}'s token into column ${column}...`
+    );
+  };
+
+  return { getActivePlayer, printNewRound, playRound };
 })();
