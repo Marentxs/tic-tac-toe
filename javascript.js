@@ -11,14 +11,14 @@ const gameboard = (function () {
 
   const getBoard = () => board;
 
-  const dropToken = (column, player) => {
+  const selectCell = (column, player) => {
     const availableCells = board
       .filter((row) => row[column].getValue() === 0)
       .map((row) => row[column]);
 
     if (!availableCells.length) return;
 
-    board[row][column].addToken(player);
+    board[row][column].selectCell(player);
   };
 
   const printBoard = () => {
@@ -28,8 +28,23 @@ const gameboard = (function () {
     console.log(boardWithCellValues);
   };
 
-  return { getBoard, dropToken, printBoard };
+  return { getBoard, selectCell, printBoard };
 })();
+
+const cell = function () {
+  let value = 0;
+
+  const addToken = (player) => {
+    value = player;
+  };
+
+  const getValue = () => value;
+
+  return {
+    addToken,
+    getValue,
+  };
+};
 
 const flow = (function () {
   if (gameOver) {
