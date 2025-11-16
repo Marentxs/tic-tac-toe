@@ -89,9 +89,35 @@ const flow = (function () {
         return board[row][0].getValue();
       }
     }
-
+    for (let col = 0; col < 3; col++) {
+      if (
+        board[0][col].getValue() !== "" &&
+        board[0][col].getValue() === board[1][col].getValue() &&
+        board[1][col].getValue() === board[2][col].getValue()
+      ) {
+        return board[0][col].getValue();
+      }
+    }
+    for (let row = 0; row < 3; row++) {
+      if (
+        board[0][0].getValue() !== "" &&
+        board[0][0].getValue() === board[1][1].getValue() &&
+        board[1][1].getValue() === board[2][2].getValue()
+      ) {
+        return board[0][0].getValue();
+      }
+    }
+    for (let row = 0; row < 3; row++) {
+      if (
+        board[2][0].getValue() !== "" &&
+        board[2][0].getValue() === board[1][1].getValue() &&
+        board[1][1].getValue() === board[0][2].getValue()
+      ) {
+        return board[2][0].getValue();
+      }
+    }
     return 0;
   };
 
-  return { getActivePlayer, printNewRound, playRound };
+  return { getActivePlayer, printNewRound, playRound, checkWinner };
 })();
