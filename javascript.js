@@ -49,8 +49,8 @@ const cell = function () {
 const flow = (function () {
   const board = gameboard;
   const players = [
-    { name: player1, token: 1 },
-    { name: player2, token: 2 },
+    { name: "player1", token: 1 },
+    { name: "player2", token: 2 },
   ];
   let activePlayer = players[0];
 
@@ -61,28 +61,42 @@ const flow = (function () {
     console.log(`${getActivePlayer().name}'s turn.`);
   };
 
-  const playRound = (column) => {
+  const playRound = (row, column) => {
     if (board.isGameOver()) return;
 
     console.log(
-      `Playing ${getActivePlayer().name}'s token into column ${column}...`
+      `Playing ${
+        getActivePlayer().name
+      }'s token into row ${row} column ${column}...`
     );
 
     if (activePlayer === players[0]) {
-      board.addToken(column, 1);
+      board.selectCell(row, column, activePlayer.token);
       activePlayer = players[1];
     } else {
-      board.addToken(column, 2);
+      board.selectCell(row, column, activePlayer.token);
       activePlayer = players[0];
     }
   };
 
+  const isGameOver = () => {
+    const boardData = board.getBoard();
+
+    if (checkWinner() !== 0) return true;
+
+    if (boardData.every((row) => row.every((cell) => cell.getValue() !== 0))) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const checkWinner = () => {
-    const board = getBoard();
+    const board = board.getBoard();
 
     for (let row = 0; row < 3; row++) {
       if (
-        board[row][0].getValue() !== "" &&
+        board[row][0].getValue() !== "0" &&
         board[row][0].getValue() === board[row][1].getValue() &&
         board[row][1].getValue() === board[row][2].getValue()
       ) {
@@ -91,7 +105,7 @@ const flow = (function () {
     }
     for (let col = 0; col < 3; col++) {
       if (
-        board[0][col].getValue() !== "" &&
+        board[0][col].getValue() !== "0" &&
         board[0][col].getValue() === board[1][col].getValue() &&
         board[1][col].getValue() === board[2][col].getValue()
       ) {
@@ -100,7 +114,7 @@ const flow = (function () {
     }
     for (let row = 0; row < 3; row++) {
       if (
-        board[0][0].getValue() !== "" &&
+        board[0][0].getValue() !== "0" &&
         board[0][0].getValue() === board[1][1].getValue() &&
         board[1][1].getValue() === board[2][2].getValue()
       ) {
@@ -109,7 +123,7 @@ const flow = (function () {
     }
     for (let row = 0; row < 3; row++) {
       if (
-        board[2][0].getValue() !== "" &&
+        board[2][0].getValue() !== "0" &&
         board[2][0].getValue() === board[1][1].getValue() &&
         board[1][1].getValue() === board[0][2].getValue()
       ) {
@@ -119,5 +133,5 @@ const flow = (function () {
     return 0;
   };
 
-  return { getActivePlayer, printNewRound, playRound, checkWinner };
+  return { getActivePlayer, printNewRound, playRound, checkWinner, isGameOver };
 })();
