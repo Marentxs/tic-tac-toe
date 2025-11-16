@@ -4,22 +4,22 @@ const gameboard = (function () {
   const board = [];
 
   for (let i = 0; i < rows; i++) {
+    board[i] = [];
+
     for (let j = 0; j < columns; j++) {
-      board[i].push(Cell());
+      board[i].push(cell());
     }
   }
 
   const getBoard = () => board;
 
-  const selectCell = (column, player) => {
-    const availableCells = board
-      .filter((row) => row[column].getValue() === 0)
-      .map((row) => row[column]);
-
-    if (!availableCells.length) return;
-
-    board[row][column].selectCell(player);
-  };
+  function selectCell(row, column, player) {
+    if (board[row][column].getValue() !== 0) {
+      console.log("spot Taken!");
+      return;
+    }
+    board[row][column].addToken(player);
+  }
 
   const printBoard = () => {
     const boardWithCellValues = board.map((row) =>
