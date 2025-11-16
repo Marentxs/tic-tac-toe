@@ -73,9 +73,11 @@ const flow = (function () {
     if (activePlayer === players[0]) {
       board.selectCell(row, column, activePlayer.token);
       activePlayer = players[1];
+      printNewRound();
     } else {
       board.selectCell(row, column, activePlayer.token);
       activePlayer = players[0];
+      printNewRound();
     }
   };
 
@@ -92,44 +94,41 @@ const flow = (function () {
   };
 
   const checkWinner = () => {
-    const board = board.getBoard();
+    const boardData = board.getBoard();
 
     for (let row = 0; row < 3; row++) {
       if (
-        board[row][0].getValue() !== "0" &&
-        board[row][0].getValue() === board[row][1].getValue() &&
-        board[row][1].getValue() === board[row][2].getValue()
+        boardData[row][0].getValue() !== 0 &&
+        boardData[row][0].getValue() === boardData[row][1].getValue() &&
+        boardData[row][1].getValue() === boardData[row][2].getValue()
       ) {
-        return board[row][0].getValue();
+        return boardData[row][0].getValue();
       }
     }
     for (let col = 0; col < 3; col++) {
       if (
-        board[0][col].getValue() !== "0" &&
-        board[0][col].getValue() === board[1][col].getValue() &&
-        board[1][col].getValue() === board[2][col].getValue()
+        boardData[0][col].getValue() !== 0 &&
+        boardData[0][col].getValue() === boardData[1][col].getValue() &&
+        boardData[1][col].getValue() === boardData[2][col].getValue()
       ) {
-        return board[0][col].getValue();
+        return boardData[0][col].getValue();
       }
     }
-    for (let row = 0; row < 3; row++) {
-      if (
-        board[0][0].getValue() !== "0" &&
-        board[0][0].getValue() === board[1][1].getValue() &&
-        board[1][1].getValue() === board[2][2].getValue()
-      ) {
-        return board[0][0].getValue();
-      }
+    if (
+      boardData[0][0].getValue() !== 0 &&
+      boardData[0][0].getValue() === boardData[1][1].getValue() &&
+      boardData[1][1].getValue() === boardData[2][2].getValue()
+    ) {
+      return boardData[0][0].getValue();
     }
-    for (let row = 0; row < 3; row++) {
-      if (
-        board[2][0].getValue() !== "0" &&
-        board[2][0].getValue() === board[1][1].getValue() &&
-        board[1][1].getValue() === board[0][2].getValue()
-      ) {
-        return board[2][0].getValue();
-      }
+    if (
+      boardData[2][0].getValue() !== 0 &&
+      boardData[2][0].getValue() === boardData[1][1].getValue() &&
+      boardData[1][1].getValue() === boardData[0][2].getValue()
+    ) {
+      return boardData[2][0].getValue();
     }
+
     return 0;
   };
 
