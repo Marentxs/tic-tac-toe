@@ -64,6 +64,10 @@ const flow = (function () {
   const playRound = (column) => {
     if (board.isGameOver()) return;
 
+    console.log(
+      `Playing ${getActivePlayer().name}'s token into column ${column}...`
+    );
+
     if (activePlayer === players[0]) {
       board.addToken(column, 1);
       activePlayer = players[1];
@@ -71,10 +75,22 @@ const flow = (function () {
       board.addToken(column, 2);
       activePlayer = players[0];
     }
+  };
 
-    console.log(
-      `Playing ${getActivePlayer().name}'s token into column ${column}...`
-    );
+  const checkWinner = () => {
+    const board = getBoard();
+
+    for (let row = 0; row < 3; row++) {
+      if (
+        board[row][0].getValue() !== "" &&
+        board[row][0].getValue() === board[row][1].getValue() &&
+        board[row][1].getValue() === board[row][2].getValue()
+      ) {
+        return board[row][0].getValue();
+      }
+    }
+
+    return 0;
   };
 
   return { getActivePlayer, printNewRound, playRound };
