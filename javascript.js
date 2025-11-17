@@ -1,3 +1,18 @@
+const cell = function () {
+  let value = 0;
+
+  const addToken = (player) => {
+    value = player;
+  };
+
+  const getValue = () => value;
+
+  return {
+    addToken,
+    getValue,
+  };
+};
+
 const gameboard = (function () {
   const rows = 3;
   const columns = 3;
@@ -31,26 +46,11 @@ const gameboard = (function () {
   return { getBoard, selectCell, printBoard };
 })();
 
-const cell = function () {
-  let value = 0;
-
-  const addToken = (player) => {
-    value = player;
-  };
-
-  const getValue = () => value;
-
-  return {
-    addToken,
-    getValue,
-  };
-};
-
 const flow = (function () {
   const board = gameboard;
   const players = [
-    { name: "player1", token: 1 },
-    { name: "player2", token: 2 },
+    { name: "player 1", token: "X" },
+    { name: "player 2", token: "O" },
   ];
   let activePlayer = players[0];
 
@@ -62,7 +62,7 @@ const flow = (function () {
   };
 
   const playRound = (row, column) => {
-    if (board.isGameOver()) return;
+    if (isGameOver()) return;
 
     console.log(
       `Playing ${
