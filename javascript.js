@@ -114,6 +114,9 @@ const flow = (function () {
   container.addEventListener("click", function (event) {
     const r = Number(event.target.dataset.row);
     const c = Number(event.target.dataset.col);
+
+    if (isNaN(r) || isNaN(c)) return;
+
     playRound(r, c);
   });
 
@@ -142,7 +145,7 @@ const flow = (function () {
   const isGameOver = () => {
     const boardData = board.getBoard();
 
-    if (checkWinner() !== 0) return true;
+    if (checkWinner().winner !== 0) return true;
 
     if (boardData.every((row) => row.every((cell) => cell.getValue() !== 0))) {
       return true;
@@ -160,7 +163,11 @@ const flow = (function () {
         boardData[row][0].getValue() === boardData[row][1].getValue() &&
         boardData[row][1].getValue() === boardData[row][2].getValue()
       ) {
-        return boardData[row][0].getValue();
+        return {
+          winner: boardData[row][0].getValue(),
+          line: "row",
+          index: row,
+        };
       }
     }
     for (let col = 0; col < 3; col++) {
@@ -169,7 +176,11 @@ const flow = (function () {
         boardData[0][col].getValue() === boardData[1][col].getValue() &&
         boardData[1][col].getValue() === boardData[2][col].getValue()
       ) {
-        return boardData[0][col].getValue();
+        return {
+          winner: boardData[0][col].getValue(),
+          line: "col",
+          index: col,
+        };
       }
     }
     if (
@@ -177,18 +188,40 @@ const flow = (function () {
       boardData[0][0].getValue() === boardData[1][1].getValue() &&
       boardData[1][1].getValue() === boardData[2][2].getValue()
     ) {
-      return boardData[0][0].getValue();
+      return { winner: boardData[0][0].getValue(), line: "diag", index: 0 };
     }
     if (
       boardData[2][0].getValue() !== 0 &&
       boardData[2][0].getValue() === boardData[1][1].getValue() &&
       boardData[1][1].getValue() === boardData[0][2].getValue()
     ) {
-      return boardData[2][0].getValue();
+      return { winner: boardData[2][0].getValue(), line: "diag", index: 1 };
     }
 
-    return 0;
+    return { winner: 0 };
   };
 
-  return { getActivePlayer, printNewRound, playRound, checkWinner, isGameOver };
+  function getGameResult() {
+    const winReport = checkWinner();
+    if (winReport.winner !== 0) {
+      return { status: "win", winner: winReport.winner, lineInfo: winReport };
+    }
+
+    const boardData = board.getBoard();
+    const full = boardData.every((row) =>
+      row.every((cell) => cell.getValue() !== 0)
+    );
+    if (full) return { status: "draw" };
+
+    return { status: "ongoing" };
+  }
+
+  return {
+    getActivePlayer,
+    printNewRound,
+    playRound,
+    checkWinner,
+    isGameOver,
+    getGameResult,
+  };
 })();
