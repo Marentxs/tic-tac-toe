@@ -46,8 +46,49 @@ const gameboard = (function () {
   return { getBoard, selectCell, printBoard };
 })();
 
+const display = (() => {
+  const container = document.getElementById("gameboard");
+
+  const create = () => {
+    const square = document.createElement("div");
+    square.classList.add("cell");
+    return square;
+  };
+
+  const rows = 3;
+  const columns = 3;
+  const cells = [];
+
+  function render() {
+    for (let i = 0; i < rows; i++) {
+      const row = document.createElement("div");
+      row.className = "row";
+      for (let j = 0; j < columns; j++) {
+        const square = create();
+        row.appendChild(square);
+
+        if (!cells[i]) cells[i] = [];
+        cells[i][j] = square;
+
+        square.dataset.row = i;
+        square.dataset.col = j;
+      }
+      container.appendChild(row);
+    }
+    return container;
+  }
+
+  function getCell(row, col) {
+    return cells[row][col];
+  }
+
+  return { render, getCell };
+})();
+
 const flow = (function () {
   const board = gameboard;
+  const container = display.render();
+
   const players = [
     { name: "player 1", token: "X" },
     { name: "player 2", token: "O" },
@@ -63,6 +104,10 @@ const flow = (function () {
 
   const playRound = (row, column) => {
     if (isGameOver()) return;
+
+    container.addEventListener("click", function (event) {
+      console.log("Game board clicked!", event.target);
+    });
 
     console.log(
       `Playing ${
@@ -134,40 +179,3 @@ const flow = (function () {
 
   return { getActivePlayer, printNewRound, playRound, checkWinner, isGameOver };
 })();
-
-const display = (() => {
-  const container = document.getElementById("gameboard");
-
-  const create = () => {
-    const square = document.createElement("div");
-    square.classList.add("cell");
-    return square;
-  };
-
-  const rows = 3;
-  const columns = 3;
-  const cells = [];
-
-  function render() {
-    for (let i = 0; i < rows; i++) {
-      const row = document.createElement("div");
-      row.className = "row";
-      for (let j = 0; j < columns; j++) {
-        const square = create();
-        row.appendChild(square);
-
-        if (!cells[i]) cells[i] = [];
-        cells[i][j] = square;
-      }
-      container.appendChild(row);
-    }
-  }
-
-  function getCell(row, col) {
-    return cells[row][col];
-  }
-
-  return { render, getCell };
-})();
-
-display.render();
