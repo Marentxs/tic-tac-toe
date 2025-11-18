@@ -169,3 +169,5 @@ const display = (() => {
 
   return { render, getCell };
 })();
+
+display.render();
