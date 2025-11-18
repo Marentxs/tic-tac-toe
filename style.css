@@ -36,10 +36,17 @@ body {
   background-color: hsl(230, 30%, 15%);
 }
 
+#container {
+  padding-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
 .title {
+  font-size: 3rem;
   display: flex;
   align-items: center;
-
   justify-content: center;
 }
 
@@ -47,14 +54,19 @@ body {
   display: grid;
   flex-direction: column;
   justify-content: center;
-  grid-template-columns: repeat(3, 80px);
+  grid-template-columns: repeat(3, 120px);
+}
+
+#gameboard,
+.row {
+  display: grid;
   gap: 4px;
 }
 
 .cell {
-  width: 80px;
-  height: 80px;
-  border: 1px solid #333;
+  width: 120px;
+  height: 120px;
+  border: 2px solid hsl(0, 0%, 80%);
   display: flex;
   align-items: center;
   justify-content: center;
