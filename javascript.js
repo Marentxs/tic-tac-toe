@@ -140,22 +140,32 @@ const display = (() => {
 
   const create = () => {
     const square = document.createElement("div");
-    square.id = "square";
+    square.classList.add("cell");
     return square;
   };
 
   const rows = 3;
   const columns = 3;
+  const cells = [];
 
-  for (let i = 0; i < rows; i++) {
-    const row = document.createElement("div");
-    row.className = "row";
-    for (let j = 0; j < columns; j++) {
-      const square = create();
-      row.appendChild(square);
+  function render() {
+    for (let i = 0; i < rows; i++) {
+      const row = document.createElement("div");
+      row.className = "row";
+      for (let j = 0; j < columns; j++) {
+        const square = create();
+        row.appendChild(square);
+
+        if (!cells[i]) cells[i] = [];
+        cells[i][j] = square;
+      }
+      container.appendChild(row);
     }
-    container.appendChild(row);
   }
 
-  return { create };
+  function getCell(row, col) {
+    return cells[row][col];
+  }
+
+  return { render, getCell };
 })();
