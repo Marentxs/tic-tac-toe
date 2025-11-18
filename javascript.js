@@ -134,3 +134,28 @@ const flow = (function () {
 
   return { getActivePlayer, printNewRound, playRound, checkWinner, isGameOver };
 })();
+
+const display = (() => {
+  const container = document.getElementById("gameboard");
+
+  const create = () => {
+    const square = document.createElement("div");
+    square.id = "square";
+    return square;
+  };
+
+  const rows = 3;
+  const columns = 3;
+
+  for (let i = 0; i < rows; i++) {
+    const row = document.createElement("div");
+    row.className = "row";
+    for (let j = 0; j < columns; j++) {
+      const square = create();
+      row.appendChild(square);
+    }
+    container.appendChild(row);
+  }
+
+  return { create };
+})();
