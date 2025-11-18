@@ -48,6 +48,9 @@ const gameboard = (function () {
 
 const display = (() => {
   const container = document.getElementById("gameboard");
+  const rows = 3;
+  const columns = 3;
+  const cells = [];
 
   const create = () => {
     const square = document.createElement("div");
@@ -55,17 +58,12 @@ const display = (() => {
     return square;
   };
 
-  const rows = 3;
-  const columns = 3;
-  const cells = [];
-
   function render() {
+    container.innerHTML = "";
     for (let i = 0; i < rows; i++) {
-      const row = document.createElement("div");
-      row.className = "row";
       for (let j = 0; j < columns; j++) {
         const square = create();
-        row.appendChild(square);
+        container.appendChild(square);
 
         if (!cells[i]) cells[i] = [];
         cells[i][j] = square;
@@ -73,7 +71,6 @@ const display = (() => {
         square.dataset.row = i;
         square.dataset.col = j;
       }
-      container.appendChild(row);
     }
     return container;
   }
@@ -102,12 +99,15 @@ const flow = (function () {
     console.log(`${getActivePlayer().name}'s turn.`);
   };
 
+  container.addEventListener("click", function (event) {
+    const r = Number(event.target.dataset.row);
+    const c = Number(event.target.dataset.col);
+    playRound(r, c);
+    console.log("Game board clicked!", event.target);
+  });
+
   const playRound = (row, column) => {
     if (isGameOver()) return;
-
-    container.addEventListener("click", function (event) {
-      console.log("Game board clicked!", event.target);
-    });
 
     console.log(
       `Playing ${

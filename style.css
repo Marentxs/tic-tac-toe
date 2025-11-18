@@ -52,7 +52,6 @@ body {
 
 #gameboard {
   display: grid;
-  flex-direction: column;
   justify-content: center;
   grid-template-columns: repeat(3, 120px);
 }
