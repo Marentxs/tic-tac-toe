@@ -99,11 +99,22 @@ const flow = (function () {
     console.log(`${getActivePlayer().name}'s turn.`);
   };
 
+  function updateScreen() {
+    for (let r = 0; r < 3; r++) {
+      for (let c = 0; c < 3; c++) {
+        const val = board.getBoard()[r][c].getValue();
+        if (val === 0) continue;
+
+        const cell = display.getCell(r, c);
+        cell.textContent = val;
+      }
+    }
+  }
+
   container.addEventListener("click", function (event) {
     const r = Number(event.target.dataset.row);
     const c = Number(event.target.dataset.col);
     playRound(r, c);
-    console.log("Game board clicked!", event.target);
   });
 
   const playRound = (row, column) => {
@@ -117,10 +128,12 @@ const flow = (function () {
 
     if (activePlayer === players[0]) {
       board.selectCell(row, column, activePlayer.token);
+      updateScreen();
       activePlayer = players[1];
       printNewRound();
     } else {
       board.selectCell(row, column, activePlayer.token);
+      updateScreen();
       activePlayer = players[0];
       printNewRound();
     }
