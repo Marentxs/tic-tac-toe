@@ -85,6 +85,7 @@ const display = (() => {
 const flow = (function () {
   const board = gameboard;
   const container = display.render();
+  const announce = document.querySelector(".announce");
 
   const players = [
     { name: "player 1", token: "X" },
@@ -132,11 +133,31 @@ const flow = (function () {
     if (activePlayer === players[0]) {
       board.selectCell(row, column, activePlayer.token);
       updateScreen();
+
+      const result = getGameResult();
+      if (result.status === "win") {
+        announce.textContent = `${result.winner} Wins!`;
+        return;
+      } else if (result.status === "draw") {
+        announce.textContent = "It's a Draw!";
+        return;
+      }
+
       activePlayer = players[1];
       printNewRound();
     } else {
       board.selectCell(row, column, activePlayer.token);
       updateScreen();
+
+      const result = getGameResult();
+      if (result.status === "win") {
+        announce.textContent = `${result.winner} Wins!`;
+        return;
+      } else if (result.status === "draw") {
+        announce.textContent = "It's a Draw!";
+        return;
+      }
+
       activePlayer = players[0];
       printNewRound();
     }
