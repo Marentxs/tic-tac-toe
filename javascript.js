@@ -87,15 +87,6 @@ const gameboard = (function () {
     return board.every((row) => row.every((cell) => cell.getValue() !== 0));
   };
 
-  const checkOver = (row, col) => {
-    if (checkWin(row, col)) {
-      const winningToken = board[row][col].getValue();
-      return players.find((player) => player.token === winningToken).name;
-    }
-    if (checkTie(row, col)) return "tie";
-    return null;
-  };
-
   const players = [
     { name: "playerOne", token: "X" },
     { name: "playerTwo", token: "O" },
@@ -150,7 +141,6 @@ const gameboard = (function () {
     getBoard,
     selectCell,
     printBoard,
-    checkOver,
     playRound,
     getActivePlayer,
     resetGame,
