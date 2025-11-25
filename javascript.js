@@ -12,6 +12,8 @@ const gameboard = (function () {
   const rows = 3;
   const cols = 3;
   const board = [];
+  let lastMove = null;
+  let winner = null;
 
   for (let i = 0; i < rows; i++) {
     board[i] = [];
@@ -40,34 +42,44 @@ const gameboard = (function () {
   };
 
   const checkWin = (row, col) => {
+    const val = board[row][col].getValue();
+
     if (
-      board[row][0].getValue() !== 0 &&
-      board[row][0].getValue() === board[row][1].getValue() &&
-      board[row][1].getValue() === board[row][2].getValue()
-    ) {
+      val !== 0 &&
+      val === board[row][0].getValue() &&
+      val === board[row][1].getValue() &&
+      val === board[row][2].getValue()
+    )
       return true;
-    } else if (
-      board[0][col].getValue() !== 0 &&
-      board[0][col].getValue() === board[1][col].getValue() &&
-      board[1][col].getValue() === board[2][col].getValue()
-    ) {
+
+    if (
+      val !== 0 &&
+      val === board[0][col].getValue() &&
+      val === board[1][col].getValue() &&
+      val === board[2][col].getValue()
+    )
       return true;
-    } else if (
-      board[0][0].getValue() !== 0 &&
-      board[0][0].getValue() === board[1][1].getValue() &&
-      board[1][1].getValue() === board[2][2].getValue()
-    ) {
+
+    if (
+      row === col &&
+      val !== 0 &&
+      val === board[0][0].getValue() &&
+      val === board[1][1].getValue() &&
+      val === board[2][2].getValue()
+    )
       return true;
-    } else if (
-      board[0][2].getValue() !== 0 &&
-      board[0][2].getValue() === board[1][1].getValue() &&
-      board[1][1].getValue() === board[2][0].getValue()
-    ) {
+
+    if (
+      row + col === 2 &&
+      val !== 0 &&
+      val === board[0][2].getValue() &&
+      val === board[1][1].getValue() &&
+      val === board[2][0].getValue()
+    )
       return true;
-    } else {
-      return false;
-    }
+    return false;
   };
+
   const checkTie = (row, col) => {
     if (checkWin(row, col)) {
       return false;
@@ -76,11 +88,12 @@ const gameboard = (function () {
   };
 
   const checkOver = (row, col) => {
-    if (checkWin(row, col) || checkTie(row, col)) {
-      return true;
-    } else {
-      return false;
+    if (checkWin(row, col)) {
+      const winningToken = board[row][col].getValue();
+      return players.find((player) => player.token === winningToken).name;
     }
+    if (checkTie(row, col)) return "tie";
+    return null;
   };
 
   const players = [
@@ -101,17 +114,20 @@ const gameboard = (function () {
     }
 
     const moveSucess = selectCell(row, col, activePlayer.token);
-    if (moveSucess) {
-      if (checkOver(row, col)) {
-        gameActive = false;
-        console.log("Game ended!");
-      } else {
-        switchPlayer();
-      }
-      printBoard();
+    lastMove = { row, col };
+    if (!moveSucess) return;
+
+    if (checkWin(row, col)) {
+      gameActive = false;
+      winner = activePlayer.token;
+    } else if (checkTie(row, col)) {
+      gameActive = false;
+      winner = "tie";
     }
+
+    if (gameActive) switchPlayer();
+    printBoard();
   };
-  printBoard();
 
   const resetGame = () => {
     gameActive = true;
@@ -125,15 +141,9 @@ const gameboard = (function () {
   };
 
   const getGameResult = () => {
-    if (checkWin(row, col)) {
-      return board[row][col].getValue();
-    }
-    if (checkTie === true) {
-      return "tie";
-    }
-    if (checkWin === false && checkTie === false) {
-      return "ongoing";
-    }
+    if (winner) return winner;
+    if (board.flat().every((c) => c.getValue() !== 0)) return "tie";
+    return "ongoing";
   };
 
   return {
