@@ -108,7 +108,7 @@ const gameboard = (function () {
       } else {
         switchPlayer();
       }
-      printBoard;
+      printBoard();
     }
   };
   printBoard();
@@ -124,6 +124,18 @@ const gameboard = (function () {
     });
   };
 
+  const getGameResult = () => {
+    if (checkWin(row, col)) {
+      return board[row][col].getValue();
+    }
+    if (checkTie === true) {
+      return "tie";
+    }
+    if (checkWin === false && checkTie === false) {
+      return "ongoing";
+    }
+  };
+
   return {
     getBoard,
     selectCell,
@@ -132,5 +144,6 @@ const gameboard = (function () {
     playRound,
     getActivePlayer,
     resetGame,
+    getGameResult,
   };
 })();
