@@ -147,3 +147,28 @@ const gameboard = (function () {
     getGameResult,
   };
 })();
+
+const display = (() => {
+  const boardDisplay = document.querySelector("#boardDisplay");
+  const message = document.querySelector("#message");
+
+  const render = () => {
+    boardDisplay.innerHTML = "";
+    for (let r = 0; r < 3; r++) {
+      for (let c = 0; c < 3; c++) {
+        const cell = document.createElement("button");
+        cell.dataset.row = r;
+        cell.dataset.col = c;
+        boardDisplay.appendChild(cell);
+      }
+    }
+  };
+
+  const clickHandler = () => {};
+
+  const showMessage = () => {};
+
+  return { render, clickHandler, showMessage };
+})();
+
+display.render();

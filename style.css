@@ -50,7 +50,7 @@ body {
   justify-content: center;
 }
 
-#gameboard {
+#boardDisplay {
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(3, 120px);
