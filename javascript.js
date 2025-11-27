@@ -129,6 +129,7 @@ const gameboard = (function () {
         cell.reset();
       });
     });
+    display.render();
   };
 
   const getGameResult = () => {
@@ -151,6 +152,7 @@ const gameboard = (function () {
 const display = (() => {
   const boardDisplay = document.querySelector("#boardDisplay");
   const message = document.querySelector("#message");
+  const reset = document.querySelector(".reset");
 
   const render = () => {
     boardDisplay.innerHTML = "";
@@ -177,7 +179,16 @@ const display = (() => {
     };
   };
 
+  const newGame = () => {
+    reset.onclick = (e) => {
+      gameboard.resetGame();
+    };
+  };
+
+  const announce = () => {};
+
   clickHandler();
+  newGame();
 
   return { render };
 })();
