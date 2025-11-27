@@ -1,9 +1,9 @@
 const cell = function () {
-  let value = 0;
+  let value = "";
 
   const addToken = (player) => (value = player);
   const getValue = () => value;
-  const reset = () => (value = 0);
+  const reset = () => (value = "");
 
   return { addToken, getValue, reset };
 };
@@ -30,7 +30,7 @@ const gameboard = (function () {
       console.log("Incorrect coordinates");
       return false;
     }
-    if (board[row][col].getValue() !== 0) {
+    if (board[row][col].getValue() !== "") {
       console.log("Spot taken");
       return false;
     }
@@ -45,7 +45,7 @@ const gameboard = (function () {
     const val = board[row][col].getValue();
 
     if (
-      val !== 0 &&
+      val !== "" &&
       val === board[row][0].getValue() &&
       val === board[row][1].getValue() &&
       val === board[row][2].getValue()
@@ -53,7 +53,7 @@ const gameboard = (function () {
       return true;
 
     if (
-      val !== 0 &&
+      val !== "" &&
       val === board[0][col].getValue() &&
       val === board[1][col].getValue() &&
       val === board[2][col].getValue()
@@ -62,7 +62,7 @@ const gameboard = (function () {
 
     if (
       row === col &&
-      val !== 0 &&
+      val !== "" &&
       val === board[0][0].getValue() &&
       val === board[1][1].getValue() &&
       val === board[2][2].getValue()
@@ -71,7 +71,7 @@ const gameboard = (function () {
 
     if (
       row + col === 2 &&
-      val !== 0 &&
+      val !== "" &&
       val === board[0][2].getValue() &&
       val === board[1][1].getValue() &&
       val === board[2][0].getValue()
@@ -84,7 +84,7 @@ const gameboard = (function () {
     if (checkWin(row, col)) {
       return false;
     }
-    return board.every((row) => row.every((cell) => cell.getValue() !== 0));
+    return board.every((row) => row.every((cell) => cell.getValue() !== ""));
   };
 
   const players = [
@@ -159,16 +159,27 @@ const display = (() => {
         const cell = document.createElement("button");
         cell.dataset.row = r;
         cell.dataset.col = c;
+
+        const value = gameboard.getBoard()[r][c];
+        cell.textContent = value;
         boardDisplay.appendChild(cell);
       }
     }
   };
 
-  const clickHandler = () => {};
+  const clickHandler = () => {
+    boardDisplay.onclick = (e) => {
+      if (e.target.tagName !== "BUTTON") return;
+      const r = +e.target.dataset.row;
+      const c = +e.target.dataset.col;
+      gameboard.playRound(r, c);
+      render();
+    };
+  };
 
-  const showMessage = () => {};
+  clickHandler();
 
-  return { render, clickHandler, showMessage };
+  return { render };
 })();
 
 display.render();
