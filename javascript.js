@@ -88,8 +88,8 @@ const gameboard = (function () {
   };
 
   const players = [
-    { name: "playerOne", token: "X" },
-    { name: "playerTwo", token: "O" },
+    { name: "Player One", token: "X" },
+    { name: "Player Two", token: "O" },
   ];
   const getActivePlayer = () => activePlayer;
   let activePlayer = players[0];
@@ -118,6 +118,7 @@ const gameboard = (function () {
 
     if (gameActive) switchPlayer();
     printBoard();
+    display.showMessage();
   };
 
   const resetGame = () => {
@@ -130,11 +131,12 @@ const gameboard = (function () {
       });
     });
     display.render();
+    display.showMessage();
   };
 
   const getGameResult = () => {
     if (winner) return winner;
-    if (board.flat().every((c) => c.getValue() !== 0)) return "tie";
+    if (board.flat().every((c) => c.getValue() !== "")) return "tie";
     return "ongoing";
   };
 
@@ -151,7 +153,7 @@ const gameboard = (function () {
 
 const display = (() => {
   const boardDisplay = document.querySelector("#boardDisplay");
-  const message = document.querySelector("#message");
+  const message = document.querySelector(".message");
   const reset = document.querySelector(".reset");
 
   const render = () => {
@@ -179,18 +181,29 @@ const display = (() => {
     };
   };
 
+  const showMessage = () => {
+    const result = gameboard.getGameResult();
+    if (result === "X") {
+      message.textContent = "Player One wins (X)";
+    } else if (result === "O") {
+      message.textContent = "Player Two wins (O)";
+    } else if (result === "tie") {
+      message.textContent = "It's a tie!";
+    } else if (result === "ongoing") {
+      message.textContent = `${gameboard.getActivePlayer().name}'s turn`;
+    }
+  };
+
   const newGame = () => {
     reset.onclick = (e) => {
       gameboard.resetGame();
     };
   };
 
-  const announce = () => {};
-
   clickHandler();
   newGame();
 
-  return { render };
+  return { render, showMessage };
 })();
 
 display.render();
