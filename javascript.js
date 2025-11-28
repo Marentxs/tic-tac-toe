@@ -208,17 +208,23 @@ const display = (() => {
   clickHandler();
   newGame();
 
+  const popup = document.getElementById("popup");
+
+  document.querySelector(".names").onclick = function () {
+    popup.classList.add("open");
+  };
+  document.querySelector(".close").onclick = function (e) {
+    e.preventDefault();
+    popup.classList.remove("open");
+  };
+  document.getElementById("playersForm").onsubmit = function (e) {
+    e.preventDefault();
+    popup.classList.remove("open");
+  };
+
   names.addEventListener("click", () => {});
 
   return { render, showMessage };
 })();
 
 display.render();
-
-document.querySelector(".names").onclick = function () {
-  document.getElementById("popup").style.display = "flex";
-};
-
-document.querySelector(".close").onclick = function () {
-  document.getElementById("popup").style.display = "none";
-};
