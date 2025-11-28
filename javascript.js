@@ -91,9 +91,15 @@ const gameboard = (function () {
     { name: "Player One", token: "X" },
     { name: "Player Two", token: "O" },
   ];
+  const getPlayers = () => players;
   const getActivePlayer = () => activePlayer;
+  const updateNames = (name1, name2) => {
+    players[0].name = name1;
+    players[1].name = name2;
+  };
   let activePlayer = players[0];
   let gameActive = true;
+
   const switchPlayer = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
   };
@@ -146,6 +152,8 @@ const gameboard = (function () {
     selectCell,
     printBoard,
     playRound,
+    getPlayers,
+    updateNames,
     getActivePlayer,
     resetGame,
     getGameResult,
@@ -187,9 +195,9 @@ const display = (() => {
   const showMessage = () => {
     const result = gameboard.getGameResult();
     if (result === "X") {
-      message.textContent = "Player One wins (X)";
+      message.textContent = `${gameboard.getActivePlayer().name}'s Wins (X)`;
     } else if (result === "O") {
-      message.textContent = "Player Two wins (O)";
+      message.textContent = `${gameboard.getActivePlayer().name}'s Wins (O)`;
     } else if (result === "tie") {
       message.textContent = "It's a tie!";
     } else if (result === "ongoing") {
@@ -211,18 +219,29 @@ const display = (() => {
   const popup = document.getElementById("popup");
 
   document.querySelector(".names").onclick = function () {
+    const players = gameboard.getPlayers();
+    document.getElementById("player1").value = players[0].name;
+    document.getElementById("player2").value = players[1].name;
     popup.classList.add("open");
   };
+
   document.querySelector(".close").onclick = function (e) {
     e.preventDefault();
     popup.classList.remove("open");
-  };
-  document.getElementById("playersForm").onsubmit = function (e) {
-    e.preventDefault();
-    popup.classList.remove("open");
+    document.getElementById("playersForm").reset();
   };
 
-  names.addEventListener("click", () => {});
+  document.getElementById("playersForm").onsubmit = function (e) {
+    e.preventDefault();
+
+    const name1 = document.getElementById("player1").value;
+    const name2 = document.getElementById("player2").value;
+
+    gameboard.updateNames(name1, name2);
+    display.showMessage();
+    popup.classList.remove("open");
+    document.getElementById("playersForm").reset();
+  };
 
   return { render, showMessage };
 })();
