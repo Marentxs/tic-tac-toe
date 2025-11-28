@@ -11,7 +11,24 @@
       <span class="title">Tic Tac Toe!</span>
       <div id="boardDisplay"></div>
       <span class="message">Make the first move</span>
-      <button class="reset">Reset</button>
+      <div class="buttons">
+        <button class="names">Change Names</button>
+        <button class="reset">Reset</button>
+      </div>
+    </div>
+    <div class="popup" id="popup">
+      <div class="popup-content">
+        <form id="playersForm" action="" method="get">
+          <label for="player1">Player 1:</label>
+          <input type="text" name="name1" id="player1" />
+
+          <label for="player2">Player 2:</label>
+          <input type="text" name="name2" id="player2" />
+
+          <button class="form">Confirm</button>
+          <button class="close" id="close">Cancel</button>
+        </form>
+      </div>
     </div>
     <script src="javascript.js"></script>
   </body>

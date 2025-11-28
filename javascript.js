@@ -130,6 +130,7 @@ const gameboard = (function () {
         cell.reset();
       });
     });
+    winner = null;
     display.render();
     display.showMessage();
   };
@@ -155,12 +156,14 @@ const display = (() => {
   const boardDisplay = document.querySelector("#boardDisplay");
   const message = document.querySelector(".message");
   const reset = document.querySelector(".reset");
+  const names = document.querySelector(".names");
 
   const render = () => {
     boardDisplay.innerHTML = "";
     for (let r = 0; r < 3; r++) {
       for (let c = 0; c < 3; c++) {
         const cell = document.createElement("button");
+        cell.setAttribute("id", "cell");
         cell.dataset.row = r;
         cell.dataset.col = c;
 
@@ -191,6 +194,8 @@ const display = (() => {
       message.textContent = "It's a tie!";
     } else if (result === "ongoing") {
       message.textContent = `${gameboard.getActivePlayer().name}'s turn`;
+    } else {
+      message.textContent = "Make the first move";
     }
   };
 
@@ -203,7 +208,17 @@ const display = (() => {
   clickHandler();
   newGame();
 
+  names.addEventListener("click", () => {});
+
   return { render, showMessage };
 })();
 
 display.render();
+
+document.querySelector(".names").onclick = function () {
+  document.getElementById("popup").style.display = "flex";
+};
+
+document.querySelector(".close").onclick = function () {
+  document.getElementById("popup").style.display = "none";
+};
